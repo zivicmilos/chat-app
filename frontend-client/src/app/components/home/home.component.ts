@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/model/user-model';
 import { UserService } from 'src/app/services/user.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from "@angular/router"
 
 @Component({
   selector: 'app-home',
@@ -8,10 +10,10 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./home.component.css']
 })
 export class HomeComponent implements OnInit {
-  user = new User();
-  users: string[] = [];
+  user: User = new User();
+  users: User[] = [];
 
-  constructor(private userService: UserService) { }
+  constructor(private userService: UserService, private toastr: ToastrService, private router: Router) { }
 
   ngOnInit(): void {
     this.initSocket();
@@ -23,31 +25,35 @@ export class HomeComponent implements OnInit {
       console.log("Socket is open");
     }
 
-    /*connection.onclose = function () {
-      connection = null;
-    }*/
+    connection.onclose = function () {
+      //connection = null;
+    }
 
-    connection.onmessage = function (msg) {
+    connection.onmessage = (msg) => {
       const data = msg.data.split("!");
-      if (data[0] === "LOGGEDIN") {
-        //users = [];
+      if (data[0] === "REGISTERED") {
+        this.users = [];
         data[1].split("|").forEach((user: string) => {
           if (user) {
             let userData = user.split(",");
-            /*this.users.push({
-              username: userData[0],
-              password: userData[1]
-            });*/
+            this.users.push(new User(userData[0], userData[1]));
           }
         });
       }
       else if (data[0] === "REGISTER") {
-        //toast(data[1]);
-        alert('register');
+        this.toastr.success(data[1]);
+      }
+      else if (data[0] === "LOG_IN") {
+        this.toastr.success(data[1]);
+        console.log(data[1].split(":")[1])
+        console.log(data[1].split(":")[1].trim())
+        if (data[1].split(":")[1].trim() === "Yes") {
+          alert('wait')
+          this.router.navigate(['/user']);
+        }
       }
       else {
-        //toast(data[1]);
-        alert('login');
+        this.toastr.success(data[1]);
       }
     }
 
@@ -61,8 +67,12 @@ export class HomeComponent implements OnInit {
     this.userService.login(this.user);
   }
 
-  getUsers() {
-    this.userService.getUsers();
+  getRegisteredUsers() {
+    this.userService.getRegisteredUsers();
+  }
+
+  getLoggedinUsers() {
+    this.userService.getLoggedinUsers();
   }
 
 }

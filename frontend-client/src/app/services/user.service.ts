@@ -12,14 +12,18 @@ export class UserService {
   private baseUrl = 'http://localhost:8080/Chat-war/api/chat/';
 
   register(user: User) {
-    return this.http.post<any>(this.baseUrl + 'register', user).subscribe();
+    return this.http.post<any>(this.baseUrl + 'users/register', user).subscribe();
   }
 
   login(user: User) {
-    return this.http.post(this.baseUrl + 'login', user).subscribe();
+    return this.http.post(this.baseUrl + 'users/login', user).subscribe();
   }
 
-  getUsers() {
-    return this.http.get(this.baseUrl + 'loggedIn').subscribe();
+  getRegisteredUsers() {
+    return this.http.get(this.baseUrl + 'users/registered').subscribe();
+  }
+
+  getLoggedinUsers() {
+    return this.http.get(this.baseUrl + 'users/loggedIn').subscribe();
   }
 }

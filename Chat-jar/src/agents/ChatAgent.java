@@ -73,13 +73,28 @@ public class ChatAgent implements Agent {
 
 						response = "LOG_IN!Logged in: " + (result ? "Yes!" : "No!");
 						break;
-					case "GET_LOGGEDIN":
-						response = "LOGGEDIN!";
-						List<User> users = chatManager.loggedInUsers();
-						for (User u : users) {
+					case "GET_REGISTERED":
+						response = "REGISTERED!";
+						List<User> registeredUsers = chatManager.registeredUsers();
+						for (User u : registeredUsers) {
 							response += u.toString() + "|";
 						}
 
+						break;
+					case "GET_LOGGEDIN":
+						response = "LOGGEDIN!";
+						List<User> loggedinUsers = chatManager.loggedInUsers();
+						for (User u : loggedinUsers) {
+							response += u.toString() + "|";
+						}
+
+						break;
+					case "LOGOUT":
+						username = (String) tmsg.getObjectProperty("username");
+						result = chatManager.logout(username);
+						
+						response = "LOGGEDOUT!Logged out: " + (result ? "Yes!" : "No!");
+						
 						break;
 					case "x":
 						break;

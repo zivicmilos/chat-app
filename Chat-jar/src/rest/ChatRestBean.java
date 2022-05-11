@@ -15,9 +15,9 @@ public class ChatRestBean implements ChatRest {
 	@EJB
 	private MessageManagerRemote messageManager;
 	
+	
 	@Override
 	public void register(User user) {
-		System.out.println(user.getUsername() + " " + user.getPassword());
 		AgentMessage message = new AgentMessage();
 		message.userArgs.put("receiver", "chat");
 		message.userArgs.put("command", "REGISTER");
@@ -37,12 +37,30 @@ public class ChatRestBean implements ChatRest {
 		
 		messageManager.post(message);
 	}
+	
+	@Override
+	public void getRegisteredUsers() {
+		AgentMessage message = new AgentMessage();
+		message.userArgs.put("receiver", "chat");
+		message.userArgs.put("command", "GET_REGISTERED");
+		
+		messageManager.post(message);
+	}
 
 	@Override
 	public void getloggedInUsers() {
 		AgentMessage message = new AgentMessage();
 		message.userArgs.put("receiver", "chat");
 		message.userArgs.put("command", "GET_LOGGEDIN");
+		
+		messageManager.post(message);
+	}
+	
+	@Override
+	public void logoutUser() {
+		AgentMessage message = new AgentMessage();
+		message.userArgs.put("receiver", "chat");
+		message.userArgs.put("command", "LOGOUT");
 		
 		messageManager.post(message);
 	}

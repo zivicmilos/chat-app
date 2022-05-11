@@ -38,10 +38,20 @@ public class ChatManagerBean implements ChatManagerRemote, ChatManagerLocal {
 			loggedIn.add(new User(username, password));
 		return exists;
 	}
+	
+	@Override
+	public List<User> registeredUsers() {
+		return registered;
+	}
 
 	@Override
 	public List<User> loggedInUsers() {
 		return loggedIn;
+	}
+	
+	@Override
+	public boolean logout(String username) {
+		return loggedIn.removeIf(u -> u.getUsername().equals(username));
 	}
 
 }

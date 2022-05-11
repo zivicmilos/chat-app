@@ -31,6 +31,22 @@
                 <button type="button" class="btn btn-primary btn-block mb-4" (click)="register()">Register</button>
                 <br>
                 <button type="button" class="btn btn-primary btn-block mb-4" (click)="login()">Login</button>
+                <br>
+                <button type="button" class="btn btn-primary btn-block mb-4" (click)="getRegisteredUsers()">List of registered users</button>
+            </div>
+
+            <div>
+                <table *ngIf="users?.length">
+                    <thead>
+                        <tr>
+                            <th>Username</th>
+                            <th>Password</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let u of users"><td>{{u.username}}</td><td>{{u.password}}</td></tr>
+                        </tbody>
+                </table>
             </div>
         </form>
     </div>
