@@ -17,6 +17,7 @@ public class ChatRestBean implements ChatRest {
 	
 	@Override
 	public void register(User user) {
+		System.out.println(user.getUsername() + " " + user.getPassword());
 		AgentMessage message = new AgentMessage();
 		message.userArgs.put("receiver", "chat");
 		message.userArgs.put("command", "REGISTER");
