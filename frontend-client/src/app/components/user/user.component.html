@@ -9,9 +9,53 @@
 </head>
 
 <body>
+    
+    <h1>{{currentUser.username}}</h1>
     <div class="text-center">
-        <button type="button" class="btn btn-primary btn-block mt-4">Logout</button>
+        <button type="button" class="btn btn-primary btn-block mt-4" (click)="logout()">Logout</button>
     </div>
+    <div>
+        <button type="button" class="btn btn-primary btn-block mb-4" (click)="getRegisteredUsers()">List of registered
+            users</button>
+    </div>
+    <div>
+        <table *ngIf="users?.length">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let u of users">
+                    <td>{{u.username}}</td>
+                    <td>{{u.password}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <button type="button" class="btn btn-primary btn-block mb-4" (click)="getLoggedinUsers()">List of loggedin
+            users</button>
+    </div>
+    <div>
+        <table *ngIf="loggedinUsers?.length">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Password</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let u of loggedinUsers">
+                    <td>{{u.username}}</td>
+                    <td>{{u.password}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </body>
 
 </html>

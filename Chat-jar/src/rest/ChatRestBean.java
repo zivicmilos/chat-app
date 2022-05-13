@@ -25,6 +25,8 @@ public class ChatRestBean implements ChatRest {
 		message.userArgs.put("password", user.getPassword());
 		
 		messageManager.post(message);
+		
+		getRegisteredUsers();
 	}
 
 	@Override
@@ -36,6 +38,8 @@ public class ChatRestBean implements ChatRest {
 		message.userArgs.put("password", user.getPassword());
 		
 		messageManager.post(message);
+		
+		getloggedInUsers();
 	}
 	
 	@Override
@@ -57,12 +61,15 @@ public class ChatRestBean implements ChatRest {
 	}
 	
 	@Override
-	public void logoutUser() {
+	public void logoutUser(String user) {
 		AgentMessage message = new AgentMessage();
 		message.userArgs.put("receiver", "chat");
 		message.userArgs.put("command", "LOGOUT");
+		message.userArgs.put("username", user);
 		
 		messageManager.post(message);
+		
+		getloggedInUsers();
 	}
 
 }

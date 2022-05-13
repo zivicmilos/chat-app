@@ -10,6 +10,7 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   private baseUrl = 'http://localhost:8080/Chat-war/api/chat/';
+  private currentUser: User = new User();
 
   register(user: User) {
     return this.http.post<any>(this.baseUrl + 'users/register', user).subscribe();
@@ -26,4 +27,22 @@ export class UserService {
   getLoggedinUsers() {
     return this.http.get(this.baseUrl + 'users/loggedIn').subscribe();
   }
+
+  logout(user: User) {
+    return this.http.delete(this.baseUrl + 'users/loggedIn/'+user.username).subscribe();
+  }
+
+  setCurrentUser(user: User) {
+    localStorage.setItem('user', JSON.stringify(user));
+  }
+
+  getCurrentUser() {
+    let s = localStorage.getItem('user');
+    let ss: string = '';
+    if (s !== null) {
+      ss = s;
+    }
+    return JSON.parse(ss);
+  }
+
 }

@@ -6,6 +6,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import models.User;
@@ -31,6 +32,6 @@ public interface ChatRest {
 	public void getloggedInUsers();
 	
 	@DELETE
-	@Path("/users/logout")
-	public void logoutUser();
+	@Path("/users/loggedIn/{user}")
+	public void logoutUser(@PathParam("user") String user);
 }

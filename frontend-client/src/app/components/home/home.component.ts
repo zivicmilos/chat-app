@@ -12,6 +12,7 @@ import { Router } from "@angular/router"
 export class HomeComponent implements OnInit {
   user: User = new User();
   users: User[] = [];
+  connection: WebSocket = new WebSocket("ws://localhost:8080/Chat-war/ws/chat");
 
   constructor(private userService: UserService, private toastr: ToastrService, private router: Router) { }
 
@@ -20,16 +21,16 @@ export class HomeComponent implements OnInit {
   }
 
   initSocket() {
-    let connection = new WebSocket("ws://localhost:8080/Chat-war/ws/chat"); // 'chat' should be individual person's username
-    connection.onopen = function () {
+    //let connection = new WebSocket("ws://localhost:8080/Chat-war/ws/chat");
+    this.connection.onopen = function () {
       console.log("Socket is open");
     }
 
-    connection.onclose = function () {
+    this.connection.onclose = function () {
       //connection = null;
     }
 
-    connection.onmessage = (msg) => {
+    this.connection.onmessage = (msg) => {
       const data = msg.data.split("!");
       if (data[0] === "REGISTERED") {
         this.users = [];
@@ -45,10 +46,8 @@ export class HomeComponent implements OnInit {
       }
       else if (data[0] === "LOG_IN") {
         this.toastr.success(data[1]);
-        console.log(data[1].split(":")[1])
-        console.log(data[1].split(":")[1].trim())
         if (data[1].split(":")[1].trim() === "Yes") {
-          alert('wait')
+          this.userService.setCurrentUser(this.user);
           this.router.navigate(['/user']);
         }
       }
@@ -60,19 +59,17 @@ export class HomeComponent implements OnInit {
   }
 
   register() {
+    //this.connection.close();
+    this.connection = new WebSocket("ws://localhost:8080/Chat-war/ws/"+this.user.username);
+    this.initSocket();
     this.userService.register(this.user);
   }
 
   login() {
+    //this.connection.close();
+    this.connection = new WebSocket("ws://localhost:8080/Chat-war/ws/"+this.user.username);
+    this.initSocket();
     this.userService.login(this.user);
-  }
-
-  getRegisteredUsers() {
-    this.userService.getRegisteredUsers();
-  }
-
-  getLoggedinUsers() {
-    this.userService.getLoggedinUsers();
   }
 
 }

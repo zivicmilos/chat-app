@@ -19,6 +19,7 @@ public class WSChat {
 	
 	@OnOpen
 	public void onOpen(@PathParam("username") String username, Session session) {
+		System.out.println(username);
 		sessions.put(username, session);
 	}
 	
@@ -34,7 +35,13 @@ public class WSChat {
 	}
 	
 	public void onMessage(String username, String message) {
+		System.out.println("Sesije:");
+		for (String key : sessions.keySet()) {
+		    System.out.println(key);
+		}
+		System.out.println("Korisnik "+username);
 		Session session = sessions.get(username);
+		if (session == null) System.out.println("nemaaaa");
 		sendMessage(session, message);
 	}
 	

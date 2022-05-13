@@ -79,6 +79,10 @@ public class ChatAgent implements Agent {
 						for (User u : registeredUsers) {
 							response += u.toString() + "|";
 						}
+						for (User u : chatManager.loggedInUsers()) {
+							System.out.println(response);
+							ws.onMessage(u.getUsername(), response);
+						}
 
 						break;
 					case "GET_LOGGEDIN":
@@ -86,6 +90,10 @@ public class ChatAgent implements Agent {
 						List<User> loggedinUsers = chatManager.loggedInUsers();
 						for (User u : loggedinUsers) {
 							response += u.toString() + "|";
+						}
+						for (User u : chatManager.loggedInUsers()) {
+							System.out.println(response);
+							ws.onMessage(u.getUsername(), response);
 						}
 
 						break;
@@ -102,8 +110,10 @@ public class ChatAgent implements Agent {
 						response = "ERROR!Option: " + option + " does not exist.";
 						break;
 					}
-					System.out.println(response);
-					ws.onMessage("chat", response);
+					if (!(option.equals("GET_REGISTERED") || option.equals("GET_LOGGEDIN"))) {
+						System.out.println(response);
+						ws.onMessage((String) tmsg.getObjectProperty("username"), response);
+					}
 					
 				} catch (JMSException e) {
 					e.printStackTrace();
