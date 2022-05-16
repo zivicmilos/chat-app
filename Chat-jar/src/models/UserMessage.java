@@ -64,4 +64,8 @@ public class UserMessage implements Serializable {
 		this.content = content;
 	}
 	
+	@Override
+	public String toString() {
+		return sender + "," + receiver + "," + date.toString() + "," + subject + "," + content;
+	}
 }

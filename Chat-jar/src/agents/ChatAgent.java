@@ -14,6 +14,7 @@ import chatmanager.ChatManagerRemote;
 import messagemanager.AgentMessage;
 import messagemanager.MessageManagerRemote;
 import models.User;
+import models.UserMessage;
 import util.JNDILookup;
 import ws.WSChat;
 
@@ -103,6 +104,14 @@ public class ChatAgent implements Agent {
 						
 						response = "LOGGEDOUT!Logged out: " + (result ? "Yes!" : "No!");
 						
+						break;
+					case "GET_MESSAGES":
+						username = (String) tmsg.getObjectProperty("username");
+						response = "MESSAGES!";
+						List<UserMessage> userMessages = chatManager.getMessages(username);
+						for (UserMessage um : userMessages) {
+							response += um.toString() + "|";
+						}
 						break;
 					case "x":
 						break;

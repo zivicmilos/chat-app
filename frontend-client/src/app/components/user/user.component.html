@@ -56,6 +56,30 @@
         </table>
     </div>
 
+    <div>
+        <button type="button" class="btn btn-primary btn-block mb-4" (click)="getMessages()">Messages</button>
+    </div>
+    <div>
+        <table *ngIf="messages?.length">
+            <thead>
+                <tr>
+                    <th>Sender</th>
+                    <th>Date</th>
+                    <th>Subject</th>
+                    <th>Content</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let m of messages">
+                    <td>{{m.receiver.username}}</td>
+                    <td>{{pipe.transform(m.date, 'dd/MM/yyyy')}}</td>
+                    <td>{{m.subject}}</td>
+                    <td>{{m.content}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </body>
 
 </html>

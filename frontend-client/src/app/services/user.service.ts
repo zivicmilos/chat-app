@@ -32,6 +32,10 @@ export class UserService {
     return this.http.delete(this.baseUrl + 'users/loggedIn/'+user.username).subscribe();
   }
 
+  getMessages(user: User) {
+    return this.http.get(this.baseUrl + 'messages/'+user.username).subscribe();
+  }
+
   setCurrentUser(user: User) {
     localStorage.setItem('user', JSON.stringify(user));
   }

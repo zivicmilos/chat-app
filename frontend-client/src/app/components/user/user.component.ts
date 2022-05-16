@@ -1,6 +1,8 @@
+import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { UserMessage } from 'src/app/model/user-message-model';
 import { User } from 'src/app/model/user-model';
 import { UserService } from 'src/app/services/user.service';
 
@@ -14,6 +16,8 @@ export class UserComponent implements OnInit {
   users: User[] = [];
   loggedinUsers: User[] = [];
   connection: WebSocket = new WebSocket("ws://localhost:8080/Chat-war/ws/chat");
+  messages: UserMessage[] = [];
+  pipe = new DatePipe('en-US');
 
   constructor(private userService: UserService, private toastr: ToastrService, private router: Router) { }
 
@@ -54,6 +58,25 @@ export class UserComponent implements OnInit {
           }
         });
       }
+      else if (data[0] === "LOGGEDOUT") {
+        this.toastr.success(data[1]);
+        if (data[1].split(":")[1].trim() === "Yes") {
+          this.currentUser = new User();
+          this.userService.setCurrentUser(this.currentUser);
+          this.connection = new WebSocket("ws://localhost:8080/Chat-war/ws/chat");
+          this.router.navigate(['/home']);
+        }
+      }
+      else if (data[0] === "MESSAGES") {
+        this.messages = [];
+        data[1].split("|").forEach((userMessage: string) => {
+          if (userMessage) {
+            let userMessageData = userMessage.split(",");
+            this.messages.push(new UserMessage(new User(userMessageData[0], ''), new User(userMessageData[2], ''), 
+              new Date(Date.parse(userMessageData[4])), userMessageData[5], userMessageData[6]));
+          }
+        });
+      }
       else {
         this.toastr.success(data[1]);
       }
@@ -71,7 +94,12 @@ export class UserComponent implements OnInit {
 
   logout() {
     this.userService.logout(this.currentUser);
-    this.router.navigate(['/home']);
+    //this.router.navigate(['/home']);
+    //this.connection.close();
+  }
+
+  getMessages() {
+    this.userService.getMessages(this.currentUser);
   }
 
 }
