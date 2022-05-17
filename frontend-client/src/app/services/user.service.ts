@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { UserMessage } from '../model/user-message-model';
 import { User } from '../model/user-model';
 
 @Injectable({
@@ -34,6 +35,16 @@ export class UserService {
 
   getMessages(user: User) {
     return this.http.get(this.baseUrl + 'messages/'+user.username).subscribe();
+  }
+  
+  send(message: UserMessage) {
+    return this.http.post(this.baseUrl + 'messages/user', {sender: message.sender.username, receiver: message.receiver.username,
+      subject: message.subject, content: message.content}).subscribe();
+  }
+
+  sendToAll(message: UserMessage) {
+    return this.http.post(this.baseUrl + 'messages/all', {sender: message.sender.username, receiver: message.receiver.username,
+      subject: message.subject, content: message.content}).subscribe();
   }
 
   setCurrentUser(user: User) {

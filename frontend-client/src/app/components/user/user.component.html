@@ -60,23 +60,45 @@
         <button type="button" class="btn btn-primary btn-block mb-4" (click)="getMessages()">Messages</button>
     </div>
     <div>
-        <table *ngIf="messages?.length">
+        <table *ngIf="messages?.length" class="table"  style="width: 50%">
             <thead>
                 <tr>
-                    <th>Sender</th>
-                    <th>Date</th>
-                    <th>Subject</th>
-                    <th>Content</th>
+                    <th style="width: 25%">Sender</th>
+                    <th style="width: 25%">Date</th>
+                    <th style="width: 25%">Subject</th>
+                    <th style="width: 25%">Content</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let m of messages">
                     <td>{{m.receiver.username}}</td>
-                    <td>{{pipe.transform(m.date, 'dd/MM/yyyy')}}</td>
+                    <td>{{pipe.transform(m.date, 'dd/MM/yyyy | HH:mm:ss')}}</td>
                     <td>{{m.subject}}</td>
                     <td>{{m.content}}</td>
                 </tr>
             </tbody>
+        </table>
+    </div>
+    <br>
+    <div>
+        <table>
+            <tr>
+                <td>Receiver:</td>
+                <td><input type="text" [(ngModel)]="message.receiver.username"></td>
+            </tr>
+            <tr>
+                <td>Subject:</td>
+                <td><input type="text" [(ngModel)]="message.subject"></td>
+            </tr>
+            <tr>
+                <td>Content:</td>
+                <td><input type="text" [(ngModel)]="message.content"></td>
+            </tr>
+            <br>
+            <tr>
+                <td><button type="button" class="btn btn-primary" (click)="send()">Send</button></td>
+                <td><button type="button" class="btn btn-primary" (click)="sendToAll()">Send to all</button></td>
+            </tr>
         </table>
     </div>
 

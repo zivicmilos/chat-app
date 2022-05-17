@@ -18,6 +18,7 @@ export class UserComponent implements OnInit {
   connection: WebSocket = new WebSocket("ws://localhost:8080/Chat-war/ws/chat");
   messages: UserMessage[] = [];
   pipe = new DatePipe('en-US');
+  message: UserMessage = new UserMessage;
 
   constructor(private userService: UserService, private toastr: ToastrService, private router: Router) { }
 
@@ -100,6 +101,18 @@ export class UserComponent implements OnInit {
 
   getMessages() {
     this.userService.getMessages(this.currentUser);
+  }
+
+  send() {
+    this.message.sender.username = this.currentUser.username;
+    this.message.date = new Date(Date.now());
+    this.userService.send(this.message);
+  }
+
+  sendToAll() {
+    this.message.sender.username = this.currentUser.username;
+    this.message.date = new Date(Date.now());
+    this.userService.sendToAll(this.message);
   }
 
 }

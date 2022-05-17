@@ -1,4 +1,7 @@
+/agentmanager/
+/agents/
+/chatmanager/
+/messagemanager/
 /models/
 /rest/
-/chatmanager/
-/agents/
+/util/

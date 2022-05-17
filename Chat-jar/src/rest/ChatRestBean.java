@@ -7,6 +7,7 @@ import javax.ws.rs.Path;
 import messagemanager.AgentMessage;
 import messagemanager.MessageManagerRemote;
 import models.User;
+import models.UserMessageDTO;
 
 @Stateless
 @Path("/chat")
@@ -81,4 +82,38 @@ public class ChatRestBean implements ChatRest {
 		
 		messageManager.post(message);
 	}
+
+	@Override
+	public void send(UserMessageDTO dto) {
+		AgentMessage message = new AgentMessage();
+		message.userArgs.put("receiver", "chat");
+		message.userArgs.put("command", "SEND_MESSAGE");
+		message.userArgs.put("messageSender", dto.getSender());
+		message.userArgs.put("messageReceiver", dto.getReceiver());
+		message.userArgs.put("messageSubject", dto.getSubject());
+		message.userArgs.put("messageContent", dto.getContent());
+		message.userArgs.put("username", dto.getSender());
+		
+		messageManager.post(message);
+		
+		getMessages(dto.getReceiver());
+		
+	}
+
+	@Override
+	public void sendToAll(UserMessageDTO dto) {
+		AgentMessage message = new AgentMessage();
+		message.userArgs.put("receiver", "chat");
+		message.userArgs.put("command", "SEND_MESSAGE_TO_ALL");
+		message.userArgs.put("messageSender", dto.getSender());
+		message.userArgs.put("messageSubject", dto.getSubject());
+		message.userArgs.put("messageContent", dto.getContent());
+		message.userArgs.put("username", dto.getSender());
+		
+		messageManager.post(message);
+		
+		getMessages("all");
+		
+	}
+
 }

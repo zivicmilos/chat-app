@@ -21,4 +21,8 @@ public interface ChatManagerRemote {
 	public boolean logout(String username);
 	
 	public List<UserMessage> getMessages(String username);
+	
+	public boolean send(String sender, String receiver, String subject, String content);
+	
+	public boolean sendToAll(String receiver, String subject, String content);
 }

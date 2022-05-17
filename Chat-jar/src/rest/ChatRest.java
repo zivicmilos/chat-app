@@ -10,6 +10,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 import models.User;
+import models.UserMessageDTO;
 
 @Remote
 public interface ChatRest {
@@ -38,4 +39,14 @@ public interface ChatRest {
 	@GET
 	@Path("/messages/{user}")
 	public void getMessages(@PathParam("user") String user);
+	
+	@POST
+	@Path("/messages/user")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void send(UserMessageDTO dto);
+	
+	@POST
+	@Path("/messages/all")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void sendToAll(UserMessageDTO dto);
 }

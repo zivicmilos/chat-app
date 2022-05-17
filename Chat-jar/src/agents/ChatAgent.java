@@ -11,7 +11,6 @@ import javax.jms.Message;
 import javax.jms.TextMessage;
 
 import chatmanager.ChatManagerRemote;
-import messagemanager.AgentMessage;
 import messagemanager.MessageManagerRemote;
 import models.User;
 import models.UserMessage;
@@ -107,11 +106,48 @@ public class ChatAgent implements Agent {
 						break;
 					case "GET_MESSAGES":
 						username = (String) tmsg.getObjectProperty("username");
-						response = "MESSAGES!";
-						List<UserMessage> userMessages = chatManager.getMessages(username);
-						for (UserMessage um : userMessages) {
-							response += um.toString() + "|";
+						if (username.equals("all")) {
+							for (User u : chatManager.registeredUsers()) {
+								response = "MESSAGES!";
+								List<UserMessage> userMessages = chatManager.getMessages(u.getUsername());
+								for (UserMessage um : userMessages) {
+									response += um.toString() + "|";
+								}
+								System.out.println(response);
+								ws.onMessage(u.getUsername(), response);
+							}
 						}
+						else {
+							response = "MESSAGES!";
+							List<UserMessage> userMessages = chatManager.getMessages(username);
+							for (UserMessage um : userMessages) {
+								response += um.toString() + "|";
+							}
+							System.out.println(response);
+							ws.onMessage((String) tmsg.getObjectProperty("username"), response);
+						}
+						
+						break;
+					case "SEND_MESSAGE":
+						String messageReceiver = (String) tmsg.getObjectProperty("messageReceiver");
+						String messageSender = (String) tmsg.getObjectProperty("messageSender");
+						String messageSubject = (String) tmsg.getObjectProperty("messageSubject");
+						String messageContent = (String) tmsg.getObjectProperty("messageContent");
+						
+						result = chatManager.send(messageReceiver, messageSender, messageSubject, messageContent);
+						
+						response = "SENT!Message sent: " + (result ? "Yes!" : "No!");
+						
+						break;
+					case "SEND_MESSAGE_TO_ALL":
+						messageSender = (String) tmsg.getObjectProperty("messageSender");
+						messageSubject = (String) tmsg.getObjectProperty("messageSubject");
+						messageContent = (String) tmsg.getObjectProperty("messageContent");
+						
+						result = chatManager.sendToAll(messageSender, messageSubject, messageContent);
+						
+						response = "SENT_TO_ALL!Message sent to all: " + (result ? "Yes!" : "No!");
+						
 						break;
 					case "x":
 						break;
@@ -119,7 +155,7 @@ public class ChatAgent implements Agent {
 						response = "ERROR!Option: " + option + " does not exist.";
 						break;
 					}
-					if (!(option.equals("GET_REGISTERED") || option.equals("GET_LOGGEDIN"))) {
+					if (!(option.equals("GET_REGISTERED") || option.equals("GET_LOGGEDIN") || option.equals("GET_MESSAGES"))) {
 						System.out.println(response);
 						ws.onMessage((String) tmsg.getObjectProperty("username"), response);
 					}
