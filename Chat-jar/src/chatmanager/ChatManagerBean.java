@@ -1,5 +1,7 @@
 package chatmanager;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,6 +11,7 @@ import java.util.Map;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 
+import models.Host;
 import models.User;
 import models.UserMessage;
 
@@ -35,16 +38,31 @@ public class ChatManagerBean implements ChatManagerRemote, ChatManagerLocal {
 
 	@Override
 	public boolean register(User user) {
+		try {
+			user.setHost(new Host(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()));
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		registered.add(user);
 		messages.put(user.getUsername(), new ArrayList<UserMessage>());
+		try {
+			System.out.println(InetAddress.getLocalHost().getHostName());
+			System.out.println(InetAddress.getLocalHost().getHostAddress());
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return true;
 	}
 
 	@Override
 	public boolean login(String username, String password) {
 		boolean exists = registered.stream().anyMatch(u->u.getUsername().equals(username) && u.getPassword().equals(password));
-		if(exists)
-			loggedIn.add(new User(username, password));
+		if(exists) {
+			User user = registered.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
+			loggedIn.add(new User(username, password, new Host(user.getHost().getAlias(), user.getHost().getAddress())));
+		}
 		return exists;
 	}
 	
