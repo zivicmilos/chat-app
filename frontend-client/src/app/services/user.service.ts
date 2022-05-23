@@ -11,7 +11,6 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   private baseUrl = 'http://localhost:8080/Chat-war/api/chat/';
-  private currentUser: User = new User();
 
   register(user: User) {
     return this.http.post<any>(this.baseUrl + 'users/register', user).subscribe();
@@ -48,11 +47,11 @@ export class UserService {
   }
 
   setCurrentUser(user: User) {
-    localStorage.setItem('user', JSON.stringify(user));
+    sessionStorage.setItem('user', JSON.stringify(user));
   }
 
   getCurrentUser() {
-    let s = localStorage.getItem('user');
+    let s = sessionStorage.getItem('user');
     let ss: string = '';
     if (s !== null) {
       ss = s;

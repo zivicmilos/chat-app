@@ -66,6 +66,6 @@ public class UserMessage implements Serializable {
 	
 	@Override
 	public String toString() {
-		return sender + "," + receiver + "," + date.toString() + "," + subject + "," + content;
+		return sender.getUsername() + "," + receiver.getUsername() + "," + date.toString() + "," + subject + "," + content;
 	}
 }

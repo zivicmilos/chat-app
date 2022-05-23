@@ -74,8 +74,8 @@ export class UserComponent implements OnInit {
         data[1].split("|").forEach((userMessage: string) => {
           if (userMessage) {
             let userMessageData = userMessage.split(",");
-            this.messages.push(new UserMessage(new User(userMessageData[0], ''), new User(userMessageData[2], ''), 
-              new Date(Date.parse(userMessageData[4])), userMessageData[5], userMessageData[6]));
+            this.messages.push(new UserMessage(new User(userMessageData[0], ''), new User(userMessageData[1], ''), 
+              new Date(Date.parse(userMessageData[2])), userMessageData[3], userMessageData[4]));
           }
         });
       }
