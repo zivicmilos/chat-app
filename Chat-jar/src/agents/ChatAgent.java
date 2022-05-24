@@ -97,13 +97,6 @@ public class ChatAgent implements Agent {
 						}
 
 						break;
-					case "LOGOUT":
-						username = (String) tmsg.getObjectProperty("username");
-						result = chatManager.logout(username);
-						
-						response = "LOGGEDOUT!Logged out: " + (result ? "Yes!" : "No!");
-						
-						break;
 					case "GET_MESSAGES":
 						username = (String) tmsg.getObjectProperty("username");
 						if (username.equals("all")) {
@@ -126,28 +119,6 @@ public class ChatAgent implements Agent {
 							System.out.println(response);
 							ws.onMessage((String) tmsg.getObjectProperty("username"), response);
 						}
-						
-						break;
-					case "SEND_MESSAGE":
-						String messageReceiver = (String) tmsg.getObjectProperty("messageReceiver");
-						String messageSender = (String) tmsg.getObjectProperty("messageSender");
-						String messageSubject = (String) tmsg.getObjectProperty("messageSubject");
-						String messageContent = (String) tmsg.getObjectProperty("messageContent");
-						
-						result = chatManager.send(messageReceiver, messageSender, messageSubject, messageContent);
-						
-						response = "SENT!Message sent: " + (result ? "Yes!" : "No!");
-						
-						break;
-					case "SEND_MESSAGE_TO_ALL":
-						messageSender = (String) tmsg.getObjectProperty("messageSender");
-						messageSubject = (String) tmsg.getObjectProperty("messageSubject");
-						messageContent = (String) tmsg.getObjectProperty("messageContent");
-						
-						result = chatManager.sendToAll(messageSender, messageSubject, messageContent);
-						
-						response = "SENT_TO_ALL!Message sent to all: " + (result ? "Yes!" : "No!");
-						
 						break;
 					case "x":
 						break;
@@ -170,8 +141,8 @@ public class ChatAgent implements Agent {
 	}
 
 	@Override
-	public String init() {
-		agentId = "chat";
+	public String init(String id) {
+		agentId = id;
 		cachedAgents.addRunningAgent(agentId, this);
 		return agentId;
 	}

@@ -23,9 +23,9 @@ import models.UserMessage;
 @LocalBean
 public class ChatManagerBean implements ChatManagerRemote, ChatManagerLocal {
 
-	private List<User> registered = new ArrayList<User>();
-	private List<User> loggedIn = new ArrayList<User>();
-	private HashMap<String, List<UserMessage>> messages = new HashMap<String, List<UserMessage>>();
+	private static List<User> registered = new ArrayList<User>();
+	private static List<User> loggedIn = new ArrayList<User>();
+	private static HashMap<String, List<UserMessage>> messages = new HashMap<String, List<UserMessage>>();
 	
 	/**
 	 * Default constructor.

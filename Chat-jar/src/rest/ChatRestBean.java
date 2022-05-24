@@ -27,6 +27,13 @@ public class ChatRestBean implements ChatRest {
 		
 		messageManager.post(message);
 		
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		getRegisteredUsers();
 	}
 
@@ -39,6 +46,13 @@ public class ChatRestBean implements ChatRest {
 		message.userArgs.put("password", user.getPassword());
 		
 		messageManager.post(message);
+		
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		getloggedInUsers();
 	}
@@ -64,11 +78,18 @@ public class ChatRestBean implements ChatRest {
 	@Override
 	public void logoutUser(String user) {
 		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", "chat");
+		message.userArgs.put("receiver", user);
 		message.userArgs.put("command", "LOGOUT");
 		message.userArgs.put("username", user);
 		
 		messageManager.post(message);
+		
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		getloggedInUsers();
 	}
@@ -86,7 +107,7 @@ public class ChatRestBean implements ChatRest {
 	@Override
 	public void send(UserMessageDTO dto) {
 		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", "chat");
+		message.userArgs.put("receiver", dto.getSender());
 		message.userArgs.put("command", "SEND_MESSAGE");
 		message.userArgs.put("messageSender", dto.getSender());
 		message.userArgs.put("messageReceiver", dto.getReceiver());
@@ -96,6 +117,13 @@ public class ChatRestBean implements ChatRest {
 		
 		messageManager.post(message);
 		
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		getMessages(dto.getReceiver());
 		
 	}
@@ -103,7 +131,7 @@ public class ChatRestBean implements ChatRest {
 	@Override
 	public void sendToAll(UserMessageDTO dto) {
 		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", "chat");
+		message.userArgs.put("receiver", dto.getSender());
 		message.userArgs.put("command", "SEND_MESSAGE_TO_ALL");
 		message.userArgs.put("messageSender", dto.getSender());
 		message.userArgs.put("messageSubject", dto.getSubject());
@@ -111,6 +139,13 @@ public class ChatRestBean implements ChatRest {
 		message.userArgs.put("username", dto.getSender());
 		
 		messageManager.post(message);
+		
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		getMessages("all");
 		

@@ -12,15 +12,22 @@ import javax.websocket.Session;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 
+import agentmanager.AgentManagerBean;
+import agentmanager.AgentManagerRemote;
+import util.JNDILookup;
+
 @Singleton
 @ServerEndpoint("/ws/{username}")
 public class WSChat {
+	private AgentManagerRemote agentManager = JNDILookup.lookUp(JNDILookup.AgentManagerLookup, AgentManagerBean.class);
 	private Map<String, Session> sessions = new HashMap<String, Session>();
 	
 	@OnOpen
 	public void onOpen(@PathParam("username") String username, Session session) {
 		System.out.println(username);
 		sessions.put(username, session);
+		if (!username.equals("chat") && agentManager.getAgentById(username) == null)
+			agentManager.startAgent(JNDILookup.UserAgentLookup, username);
 	}
 	
 	@OnClose
