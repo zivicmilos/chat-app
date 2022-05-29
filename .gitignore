@@ -16,6 +16,7 @@
 
 # Package Files #
 *.jar
+!Chat-jarClient/lib/jboss-client.jar
 *.war
 *.nar
 *.ear
